@@ -1,0 +1,12 @@
+-- Gonzalez Julieta 🌷
+
+CREATE DATABASE IF NOT EXISTS Tienda;
+USE Tienda;
+
+-- Creamos la tabla log
+CREATE TABLE IF NOT EXISTS log (
+    idlog INT AUTO_INCREMENT PRIMARY KEY,
+    numeroPedido INT NOT NULL,
+    FechaAnulacion DATE NOT NULL,
+    FOREIGN KEY (numeroPedido) REFERENCES Pedidos(NumeroPedido)
+);

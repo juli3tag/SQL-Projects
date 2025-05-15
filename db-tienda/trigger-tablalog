@@ -1,0 +1,32 @@
+-- Gonzalez Julieta 🌷
+
+CREATE DATABASE IF NOT EXISTS Tienda;
+USE Tienda;
+
+DELIMITER //
+
+CREATE TRIGGER trg_log_anulacion
+AFTER UPDATE ON Pedidos
+FOR EACH ROW
+BEGIN
+    -- Verificamos si el pedido pasó de otro estado a 'anulado'
+    IF OLD.Estado <> 'anulado' AND NEW.Estado = 'anulado' THEN
+        INSERT INTO log (numeroPedido, FechaAnulacion)
+        VALUES (NEW.NumeroPedido, CURDATE());
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+-- Consultas de prueba
+
+SELECT * FROM Pedidos WHERE NumeroPedido = 8;
+
+UPDATE Pedidos
+SET Estado = 'anulado'
+WHERE NumeroPedido = 8;
+-- Esto activará automáticamente el trigger trg_log_anulacion.
+
+-- Verificamos si el registro se inserto en la tabla log
+SELECT * FROM log WHERE numeroPedido = 8;
